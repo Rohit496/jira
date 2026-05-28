@@ -1,33 +1,25 @@
-from fastapi import APIRouter, HTTPException
-from typing import List
+from fastapi import APIRouter
 from backend.app.models.employee import Employee
+from backend.app.services.employee import EmployeeService
 
 router = APIRouter()
 
-# In-memory storage for employees
-employees = {}
+storage = {}
 
-@router.post('/employee/', response_model=Employee)
+@router.post("/employee/")
 async def create_employee(employee: Employee):
-    if employee.email in employees:
-        raise HTTPException(status_code=400, detail='Email already exists')
-    employees[employee.email] = employee
+    storage[employee.id] = employee
     return employee
 
-@router.get('/employee/', response_model=List[Employee])
-async def get_employees():
-    return list(employees.values())
+@router.get("/employee/{employee_id}")
+async def read_employee(employee_id: int):
+    return storage.get(employee_id)
 
-@router.put('/employee/{email}', response_model=Employee)
-async def update_employee(email: str, employee: Employee):
-    if email not in employees:
-        raise HTTPException(status_code=404, detail='Employee not found')
-    employees[email] = employee
+@router.put("/employee/{employee_id}")
+async def update_employee(employee_id: int, employee: Employee):
+    storage[employee_id] = employee
     return employee
 
-@router.delete('/employee/{email}')
-async def delete_employee(email: str):
-    if email not in employees:
-        raise HTTPException(status_code=404, detail='Employee not found')
-    del employees[email]
-    return {'detail': 'Employee deleted'}
+@router.delete("/employee/{employee_id}")
+async def delete_employee(employee_id: int):
+    return storage.pop(employee_id, None)
