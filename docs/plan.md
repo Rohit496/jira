@@ -1,64 +1,59 @@
-# Technical Plan: Employee Component Pagination
+# Technical Plan: Modal Confirmation for Employee Deletion
 
 ## 1. Approach
-To implement the pagination feature for the employee component, we will create a user interface that allows users to navigate through employee records efficiently. This will involve displaying a configurable number of records per page, providing navigation controls, and ensuring accessibility and performance standards are met.
+To implement the modal confirmation dialog for employee deletion, we will leverage the existing UI framework to ensure consistency with the application design. The modal will be triggered upon the delete action, displaying relevant employee details and providing options to confirm or cancel the deletion, thereby enhancing user experience and preventing accidental data loss.
 
 ## 2. Architecture
 - **Components:**
-  - `PaginationController`: Manages pagination logic and state.
-  - `EmployeeList`: Renders the list of employee records.
-  - `PaginationControls`: Provides UI elements for navigation (Next, Previous, page number input).
-  - `Logger`: Handles logging of user interactions.
-
+  - Modal Component
+  - Employee Service (for fetching employee details)
+  - Logging Service (for tracking deletion actions)
+  
 - **Interaction Diagram:**
   ```
-  PaginationController
-      ├──> EmployeeList
-      ├──> PaginationControls
-      └──> Logger
+  User Action
+    └─> Trigger Delete Action
+        └─> Modal Component
+            ├─> Fetch Employee Details (Employee Service)
+            ├─> Confirm Button (Delete Employee)
+            └─> Cancel Button (Close Modal)
+                └─> Log Action (Logging Service)
   ```
 
 ## 3. Data model
-- **Entities:**
-  - `EmployeeRecord`: Represents an employee.
-    - `id: int`
-    - `name: str`
-    - `position: str`
-    - `department: str`
-  
-- **Pagination State:**
-  - `PaginationState`: Represents the current pagination state.
-    - `current_page: int`
-    - `total_records: int`
-    - `records_per_page: int`
+- **Employee:**
+  - `id: int`
+  - `name: str`
+  - `details: str` (additional employee details to be displayed in the modal)
 
 ## 4. Tech stack
 - **Language:** Python 3.11+
 - **Libraries:** 
-  - `Flask` for web framework (justified as it simplifies routing and rendering).
-  - `SQLAlchemy` for ORM (justified for efficient data handling).
-  - Standard libraries for logging and configuration.
+  - Standard libraries only (e.g., `logging` for tracking actions).
+  - No third-party dependencies are required as we will utilize the existing UI framework.
 
 ## 5. Key flows
-1. User sets the number of records per page via a configuration option.
-2. The system fetches the total number of employee records.
-3. The `PaginationController` calculates the total pages based on the records per page.
-4. User navigates using "Next" and "Previous" buttons, which update the current page.
-5. User enters a specific page number, and the system fetches and displays the corresponding records.
-6. The total number of records and the current page number are displayed to the user.
-7. User interactions are logged for monitoring.
+1. User selects an employee for deletion.
+2. User clicks the delete button, triggering the modal.
+3. Modal displays with the message: "Are you sure you want to delete [Employee Name]?" and relevant employee details.
+4. User reviews the information and decides to either confirm or cancel.
+5. If "Confirm" is clicked, the employee is deleted, and the modal closes.
+6. If "Cancel" is clicked, the modal closes without any action taken.
 
 ## 6. Risks & mitigations
-- **Risk:** Performance issues with large datasets.
-  - **Mitigation:** Implement efficient data fetching and caching strategies.
-- **Risk:** Accessibility compliance may be overlooked.
-  - **Mitigation:** Conduct accessibility testing and adhere to WCAG 2.1 standards.
-- **Risk:** User confusion with pagination controls.
-  - **Mitigation:** Provide clear labeling and tooltips for navigation elements.
+- **Risk:** Users may not see the modal due to UI issues.
+  - **Mitigation:** Conduct thorough testing across devices and browsers to ensure visibility.
+  
+- **Risk:** The modal may not load within the required 200 milliseconds.
+  - **Mitigation:** Optimize the modal loading process and test performance under various conditions.
+  
+- **Risk:** Sensitive employee data could be exposed in the modal.
+  - **Mitigation:** Ensure only necessary details are displayed and adhere to security best practices.
 
 ## 7. Definition of done
-- Users can configure the number of records displayed per page (Functional Requirement 1).
-- "Next" and "Previous" buttons function correctly and navigate through pages (Functional Requirement 2).
-- Users can enter a page number to jump directly to that page (Functional Requirement 3).
-- The total number of employee records and the current page number are displayed accurately (Functional Requirement 4).
-- Pagination controls are accessible via keyboard navigation (Functional Requirement 5).
+- The modal confirmation dialog appears when an employee is selected for deletion (AC1).
+- The modal displays the correct employee name and details (AC2).
+- The modal includes "Confirm" and "Cancel" buttons (AC3).
+- Clicking "Confirm" deletes the employee and closes the modal (AC4).
+- Clicking "Cancel" closes the modal without any action (AC5).
+- The modal meets accessibility standards (WCAG 2.1) (AC6).
