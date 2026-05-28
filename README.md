@@ -15,7 +15,7 @@
 - `_generated/scrum-7/backend/app/models/employee.py`
 - `_generated/scrum-7/backend/app/routes/employee.py`
 - `_generated/scrum-7/backend/app/services/employee.py`
-- `_generated/scrum-7/src/__init__.py`
+- `_generated/scrum-7/src/employee.py`
 - `docs/constitution.md`
 - `docs/plan.md`
 - `docs/spec.md`

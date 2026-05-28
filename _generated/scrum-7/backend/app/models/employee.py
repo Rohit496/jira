@@ -1,8 +1,5 @@
-from dataclasses import dataclass
-
-@dataclass
 class Employee:
-    id: int
-    name: str
-    position: str
-    isDeletable: bool
+    def __init__(self, id: int, name: str, details: str):
+        self.id = id
+        self.name = name
+        self.details = details
