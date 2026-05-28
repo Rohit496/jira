@@ -12,13 +12,11 @@
 - `docs/tasks.md`
 
 ## Files in this commit
-- `backend/app/models/employee.py`
-- `backend/app/routes/employee.py`
-- `backend/app/services/employee.py`
+- `_generated/scrum-6/backend/app/models/employee.py`
+- `_generated/scrum-6/backend/app/routes/employee.py`
+- `_generated/scrum-6/backend/app/services/employee.py`
+- `_generated/scrum-6/src/employee.py`
 - `docs/constitution.md`
 - `docs/plan.md`
 - `docs/spec.md`
 - `docs/tasks.md`
-- `frontend/src/app/components/employee-list/employee-list.component.ts`
-- `frontend/src/app/services/employee.service.ts`
-- `src/employee.py`
