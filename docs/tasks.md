@@ -1,79 +1,75 @@
-# Task Breakdown: Employee Component Pagination
+# Task Breakdown: Modal Confirmation Before Deleting an Employee
 
-### Task 1: Set Up Project Structure
-- **Goal:** Create the initial project structure for the pagination feature.
+### Task 1: Create Modal Component
+- **Goal:** Implement the modal component that will be displayed for confirmation before deletion.
 - **Files:** 
-  - `src/__init__.py`
-  - `src/app.py`
+  - `src/modal.py`
 - **Acceptance:** 
-  - Project structure is created with necessary files.
-  - The application can be run without errors.
+  - A modal confirmation dialog appears when the "Delete" button is clicked.
+  - The modal includes "Confirm" and "Cancel" buttons.
 - **Depends on:** none
-- **Size:** S
+- **Size:** M
 
-### Task 2: Implement Pagination State Management
-- **Goal:** Create the `PaginationState` class to manage pagination data.
+### Task 2: Implement Modal Logic
+- **Goal:** Add logic to handle the display and actions of the modal component.
 - **Files:** 
-  - `src/pagination.py`
+  - `src/modal.py`
 - **Acceptance:** 
-  - `PaginationState` class is implemented with `current_page`, `total_records`, and `records_per_page` attributes.
-  - The class can be instantiated and its attributes can be set and retrieved.
+  - The modal displays a clear message about the deletion action.
+  - Clicking "Confirm" successfully deletes the employee record.
+  - Clicking "Cancel" closes the modal without deleting the record.
 - **Depends on:** Task 1
 - **Size:** M
 
-### Task 3: Create Pagination Controller
-- **Goal:** Implement the `PaginationController` to manage pagination logic.
-- **Files:** 
-  - `src/pagination_controller.py`
-- **Acceptance:** 
-  - `PaginationController` can calculate total pages based on records per page.
-  - It can update the current page based on user navigation.
-- **Depends on:** Task 2
-- **Size:** M
-
-### Task 4: Develop Employee List Component
-- **Goal:** Create the `EmployeeList` component to display employee records.
+### Task 3: Create Employee List Component
+- **Goal:** Implement the employee list component that triggers the modal.
 - **Files:** 
   - `src/employee_list.py`
 - **Acceptance:** 
-  - `EmployeeList` can render a list of employee records based on the current page.
-  - It correctly displays the number of records per page.
-- **Depends on:** Task 3
+  - The Employee List Component triggers the Modal Component when the "Delete" button is clicked.
+- **Depends on:** none
 - **Size:** M
 
-### Task 5: Implement Pagination Controls
-- **Goal:** Create the `PaginationControls` component for user navigation.
+### Task 4: Implement Logging Service
+- **Goal:** Create a logging service to log deletion attempts for auditing purposes.
 - **Files:** 
-  - `src/pagination_controls.py`
+  - `src/logging_service.py`
 - **Acceptance:** 
-  - Pagination controls include "Next", "Previous", and page number input.
-  - Controls are accessible via keyboard navigation.
-- **Depends on:** Task 4
+  - The Logging Service logs the deletion attempt when "Confirm" is clicked.
+- **Depends on:** none
 - **Size:** M
 
-### Task 6: Add Logging Functionality
-- **Goal:** Implement logging for user interactions with pagination.
-- **Files:** 
-  - `src/logger.py`
-- **Acceptance:** 
-  - User interactions are logged correctly.
-  - Logs can be retrieved for monitoring purposes.
-- **Depends on:** Task 5
-- **Size:** M
-
-### Task 7: Create Main Application Entry Point
-- **Goal:** Set up the main application to integrate all components and run the server.
+### Task 5: Integrate Components
+- **Goal:** Connect the Employee List Component with the Modal Component and Logging Service.
 - **Files:** 
   - `src/main.py`
 - **Acceptance:** 
-  - The application runs and displays employee records with pagination.
-  - All components function together without errors.
-- **Depends on:** Task 6
+  - The modal is triggered correctly from the Employee List Component, and logging occurs upon confirmation.
+- **Depends on:** Tasks 2, 3, and 4
 - **Size:** L
 
+### Task 6: Accessibility Compliance
+- **Goal:** Ensure the modal component meets WCAG 2.1 accessibility standards.
+- **Files:** 
+  - `src/modal.py`
+- **Acceptance:** 
+  - The modal meets accessibility standards (WCAG 2.1).
+- **Depends on:** Task 1
+- **Size:** M
+
+### Task 7: Smoke Test Entry Point
+- **Goal:** Create a main entry point to demonstrate the modal functionality.
+- **Files:** 
+  - `src/main.py`
+- **Acceptance:** 
+  - The application runs and demonstrates the modal confirmation dialog when attempting to delete an employee.
+- **Depends on:** Task 5
+- **Size:** S
+
 ## Traceability
-- Users can configure the number of records displayed per page. (Task 2)
-- "Next" and "Previous" buttons function correctly and navigate through pages. (Task 5)
-- Users can enter a page number to jump directly to that page. (Task 3)
-- The total number of employee records and the current page number are displayed accurately. (Task 4)
-- Pagination controls are accessible via keyboard navigation. (Task 5)
+- AC1: Task 1, Task 2
+- AC2: Task 2
+- AC3: Task 1, Task 2
+- AC4: Task 5
+- AC5: Task 2
+- AC6: Task 6
