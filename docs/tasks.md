@@ -1,79 +1,62 @@
-# Task Breakdown: Employee Component Pagination
+# Task Breakdown: Fix the Pagination Position in Middle
 
-### Task 1: Set Up Project Structure
-- **Goal:** Create the initial project structure for the pagination feature.
-- **Files:** 
-  - `src/__init__.py`
-  - `src/app.py`
-- **Acceptance:** 
-  - Project structure is created with necessary files.
-  - The application can be run without errors.
-- **Depends on:** none
-- **Size:** S
-
-### Task 2: Implement Pagination State Management
-- **Goal:** Create the `PaginationState` class to manage pagination data.
+### Task 1: Create Pagination Component
+- **Goal:** Implement the basic structure of the pagination component.
 - **Files:** 
   - `src/pagination.py`
 - **Acceptance:** 
-  - `PaginationState` class is implemented with `current_page`, `total_records`, and `records_per_page` attributes.
-  - The class can be instantiated and its attributes can be set and retrieved.
+  - A `PaginationControl` dataclass is defined with attributes for `current_page`, `total_pages`, `is_fixed`, `is_centered`, and `is_accessible`.
+- **Depends on:** none
+- **Size:** M
+
+### Task 2: Implement Scroll Event Listener
+- **Goal:** Ensure pagination controls remain fixed during scrolling.
+- **Files:** 
+  - `src/pagination.py`
+- **Acceptance:** 
+  - Pagination controls are fixed in position when scrolling.
 - **Depends on:** Task 1
 - **Size:** M
 
-### Task 3: Create Pagination Controller
-- **Goal:** Implement the `PaginationController` to manage pagination logic.
+### Task 3: Implement Resize Event Listener
+- **Goal:** Adjust pagination controls' position responsively when the window is resized.
 - **Files:** 
-  - `src/pagination_controller.py`
+  - `src/pagination.py`
 - **Acceptance:** 
-  - `PaginationController` can calculate total pages based on records per page.
-  - It can update the current page based on user navigation.
+  - Pagination controls adjust correctly when the window is resized.
 - **Depends on:** Task 2
 - **Size:** M
 
-### Task 4: Develop Employee List Component
-- **Goal:** Create the `EmployeeList` component to display employee records.
+### Task 4: Add Keyboard Navigation
+- **Goal:** Enable keyboard navigation for pagination controls.
 - **Files:** 
-  - `src/employee_list.py`
+  - `src/pagination.py`
 - **Acceptance:** 
-  - `EmployeeList` can render a list of employee records based on the current page.
-  - It correctly displays the number of records per page.
+  - Pagination controls can be navigated using the keyboard.
 - **Depends on:** Task 3
 - **Size:** M
 
-### Task 5: Implement Pagination Controls
-- **Goal:** Create the `PaginationControls` component for user navigation.
+### Task 5: Implement Visual Indicators
+- **Goal:** Add visual indicators for current page and navigation options.
 - **Files:** 
-  - `src/pagination_controls.py`
+  - `src/pagination.py`
 - **Acceptance:** 
-  - Pagination controls include "Next", "Previous", and page number input.
-  - Controls are accessible via keyboard navigation.
+  - Visual indicators are present and function correctly.
 - **Depends on:** Task 4
 - **Size:** M
 
-### Task 6: Add Logging Functionality
-- **Goal:** Implement logging for user interactions with pagination.
-- **Files:** 
-  - `src/logger.py`
-- **Acceptance:** 
-  - User interactions are logged correctly.
-  - Logs can be retrieved for monitoring purposes.
-- **Depends on:** Task 5
-- **Size:** M
-
-### Task 7: Create Main Application Entry Point
-- **Goal:** Set up the main application to integrate all components and run the server.
+### Task 6: Create Smoke Test Entry Point
+- **Goal:** Provide a demonstration of the pagination functionality.
 - **Files:** 
   - `src/main.py`
 - **Acceptance:** 
-  - The application runs and displays employee records with pagination.
-  - All components function together without errors.
-- **Depends on:** Task 6
-- **Size:** L
+  - The application runs and displays the pagination component with all functionalities.
+- **Depends on:** Task 5
+- **Size:** S
 
 ## Traceability
-- Users can configure the number of records displayed per page. (Task 2)
-- "Next" and "Previous" buttons function correctly and navigate through pages. (Task 5)
-- Users can enter a page number to jump directly to that page. (Task 3)
-- The total number of employee records and the current page number are displayed accurately. (Task 4)
-- Pagination controls are accessible via keyboard navigation. (Task 5)
+- Pagination controls are fixed in position when scrolling. (Task 2)
+- Pagination controls are centered on the page. (Task 1)
+- Pagination controls adjust correctly when the window is resized. (Task 3)
+- Pagination controls can be navigated using the keyboard. (Task 4)
+- Visual indicators are present and function correctly. (Task 5)

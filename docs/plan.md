@@ -1,64 +1,59 @@
-# Technical Plan: Employee Component Pagination
+# Technical Plan: Fix the Pagination Position in Middle
 
 ## 1. Approach
-To implement the pagination feature for the employee component, we will create a user interface that allows users to navigate through employee records efficiently. This will involve displaying a configurable number of records per page, providing navigation controls, and ensuring accessibility and performance standards are met.
+To enhance the user experience, we will implement a fixed-position pagination control that remains visible during scrolling, is centered on the page, and adjusts responsively to window resizing. Additionally, we will ensure keyboard accessibility and include visual indicators for navigation, thereby improving usability and aesthetics.
 
 ## 2. Architecture
 - **Components:**
-  - `PaginationController`: Manages pagination logic and state.
-  - `EmployeeList`: Renders the list of employee records.
-  - `PaginationControls`: Provides UI elements for navigation (Next, Previous, page number input).
-  - `Logger`: Handles logging of user interactions.
+  - Pagination Component
+  - Scroll Event Listener
+  - Resize Event Listener
+  - Accessibility Enhancements
+  - Analytics Integration
 
 - **Interaction Diagram:**
   ```
-  PaginationController
-      ├──> EmployeeList
-      ├──> PaginationControls
-      └──> Logger
+  Pagination Component
+      ├── Scroll Event Listener
+      ├── Resize Event Listener
+      ├── Accessibility Enhancements
+      └── Analytics Integration
   ```
 
 ## 3. Data model
-- **Entities:**
-  - `EmployeeRecord`: Represents an employee.
-    - `id: int`
-    - `name: str`
-    - `position: str`
-    - `department: str`
-  
-- **Pagination State:**
-  - `PaginationState`: Represents the current pagination state.
-    - `current_page: int`
-    - `total_records: int`
-    - `records_per_page: int`
+- **PaginationControl (dataclass):**
+  - `current_page: int`
+  - `total_pages: int`
+  - `is_fixed: bool`
+  - `is_centered: bool`
+  - `is_accessible: bool`
 
 ## 4. Tech stack
-- **Language:** Python 3.11+
+- **Language:** Python 3.11+ (preferred)
 - **Libraries:** 
-  - `Flask` for web framework (justified as it simplifies routing and rendering).
-  - `SQLAlchemy` for ORM (justified for efficient data handling).
-  - Standard libraries for logging and configuration.
+  - Standard library for event handling and data manipulation.
+  - No third-party dependencies required as the functionality can be achieved using built-in capabilities.
 
 ## 5. Key flows
-1. User sets the number of records per page via a configuration option.
-2. The system fetches the total number of employee records.
-3. The `PaginationController` calculates the total pages based on the records per page.
-4. User navigates using "Next" and "Previous" buttons, which update the current page.
-5. User enters a specific page number, and the system fetches and displays the corresponding records.
-6. The total number of records and the current page number are displayed to the user.
-7. User interactions are logged for monitoring.
+1. User opens the application and scrolls down the page.
+2. Pagination controls remain fixed at the bottom of the viewport.
+3. User resizes the window, and pagination controls adjust their position accordingly.
+4. User navigates through pagination using the keyboard (Tab key).
+5. Visual indicators (e.g., arrows) are displayed correctly, reflecting the current page and available navigation options.
 
 ## 6. Risks & mitigations
-- **Risk:** Performance issues with large datasets.
-  - **Mitigation:** Implement efficient data fetching and caching strategies.
-- **Risk:** Accessibility compliance may be overlooked.
-  - **Mitigation:** Conduct accessibility testing and adhere to WCAG 2.1 standards.
-- **Risk:** User confusion with pagination controls.
-  - **Mitigation:** Provide clear labeling and tooltips for navigation elements.
+- **Risk:** Pagination controls may not display correctly on all screen sizes.
+  - **Mitigation:** Implement thorough responsive design testing across various devices.
+  
+- **Risk:** Keyboard navigation may not be intuitive for all users.
+  - **Mitigation:** Conduct user testing to gather feedback and refine accessibility features.
+
+- **Risk:** Performance issues if pagination controls are not optimized.
+  - **Mitigation:** Ensure pagination loads within the specified 200 milliseconds by profiling and optimizing code.
 
 ## 7. Definition of done
-- Users can configure the number of records displayed per page (Functional Requirement 1).
-- "Next" and "Previous" buttons function correctly and navigate through pages (Functional Requirement 2).
-- Users can enter a page number to jump directly to that page (Functional Requirement 3).
-- The total number of employee records and the current page number are displayed accurately (Functional Requirement 4).
-- Pagination controls are accessible via keyboard navigation (Functional Requirement 5).
+- Pagination controls are fixed in position when scrolling (satisfies requirement 1).
+- Pagination controls are centered on the page (satisfies requirement 2).
+- Pagination controls adjust correctly when the window is resized (satisfies requirement 3).
+- Pagination controls can be navigated using the keyboard (satisfies requirement 4).
+- Visual indicators are present and function correctly (satisfies requirement 5).
