@@ -1,4 +1,4 @@
-from backend.app.models.employee import Employee
-from backend.app.services.employee import fetch_all_employees
+from backend.app.models.employee import EmployeeRecord
+from backend.app.routes.employee import employee_bp
 
-__all__ = ['Employee', 'fetch_all_employees']
+# This file serves as an entry point for smoke tests and re-exports the model and routes.

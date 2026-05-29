@@ -1,10 +1,13 @@
 from flask import Blueprint, jsonify
-from backend.app.models.employee import Employee
+from backend.app.models.employee import EmployeeRecord
 
 employee_bp = Blueprint('employee', __name__)
 
 @employee_bp.route('/employees', methods=['GET'])
 def get_employees():
-    # Stub: Replace with actual data retrieval logic
-    employees = [Employee(1, 'John Doe', 'Developer', 'Engineering', 'john@example.com', '123-456-7890', '2021-01-01')]
-    return jsonify([e.__dict__ for e in employees])
+    employees = [
+        EmployeeRecord(1, 'Alice', 'Developer', 'Engineering', 'alice@example.com', '123-456-7890', '2021-01-15'),
+        EmployeeRecord(2, 'Bob', 'Designer', 'Marketing', 'bob@example.com', '123-456-7891', '2020-03-22'),
+        EmployeeRecord(3, 'Charlie', 'Manager', 'Sales', 'charlie@example.com', '123-456-7892', '2019-07-30'),
+    ]
+    return jsonify([emp.__dict__ for emp in employees])
