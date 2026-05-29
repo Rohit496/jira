@@ -20,7 +20,7 @@ interface Employee {
     <div class="page">
       <header class="page-head">
         <h2>Employees</h2>
-        <span class="count">{{ totalRecords() }} total</span>
+        <span class="count">{{ employees().length }} total</span>
       </header>
 
       <div class="card form-card">
@@ -49,7 +49,7 @@ interface Employee {
             </tr>
           </thead>
           <tbody>
-            @for (e of paginatedEmployees(); track e.id) {
+            @for (e of employees(); track e.id) {
               <tr>
                 <td>{{ e.name }}</td>
                 <td>{{ e.department }}</td>
@@ -68,16 +68,6 @@ interface Employee {
         @if (employees().length === 0) {
           <p class="empty">No employees yet — add one above.</p>
         }
-      </div>
-
-      <div class="pagination-controls">
-        <button class="ghost" (click)="firstPage()" [disabled]="currentPage() === 1">First</button>
-        <button class="ghost" (click)="previousPage()" [disabled]="currentPage() === 1">Previous</button>
-        <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
-        <button class="ghost" (click)="nextPage()" [disabled]="currentPage() === totalPages()">Next</button>
-        <button class="ghost" (click)="lastPage()" [disabled]="currentPage() === totalPages()">Last</button>
-        <input type="number" [(ngModel)]="jumpToPage" min="1" [max]="totalPages()" placeholder="Jump to page" />
-        <button class="primary" (click)="goToPage()">Go</button>
       </div>
 
       @if (showEditModal) {
@@ -154,76 +144,17 @@ interface Employee {
       width: 100%; max-width: 400px;
     }
     .modal-card h3 { font-size: 1.05rem; color: var(--text-0); margin-bottom: 0.5rem; }
-
-    .pagination-controls {
-      display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem;
-      justify-content: center; color: var(--text-1);
-    }
-    .pagination-controls input {
-      width: 50px; text-align: center;
-    }
-    .pagination-controls button {
-      min-width: 60px;
-    }
-    `
-  ],
+  `],
 })
 export class EmployeeDetailComponent {
   private _employees = signal<Employee[]>([
-    { id: 1, name: 'Alice Johnson', department: 'Engineering', position: 'Developer', email: 'alice.j@example.com', phone: '555-0101', date_hired: '2021-06-15' },
-    { id: 2, name: 'Bob Smith', department: 'Marketing', position: 'Manager', email: 'bob.s@example.com', phone: '555-0102', date_hired: '2020-03-22' },
-    { id: 3, name: 'Charlie Brown', department: 'Sales', position: 'Salesperson', email: 'charlie.b@example.com', phone: '555-0103', date_hired: '2019-11-05' },
-    { id: 4, name: 'Diana Prince', department: 'HR', position: 'Recruiter', email: 'diana.p@example.com', phone: '555-0104', date_hired: '2018-08-30' },
-    { id: 5, name: 'Eve Adams', department: 'Finance', position: 'Analyst', email: 'eve.a@example.com', phone: '555-0105', date_hired: '2022-01-10' },
-    { id: 6, name: 'Frank Castle', department: 'Security', position: 'Officer', email: 'frank.c@example.com', phone: '555-0106', date_hired: '2021-02-14' },
-    { id: 7, name: 'Grace Hopper', department: 'Engineering', position: 'Lead Developer', email: 'grace.h@example.com', phone: '555-0107', date_hired: '2017-05-20' },
-    { id: 8, name: 'Hank Pym', department: 'Research', position: 'Scientist', email: 'hank.p@example.com', phone: '555-0108', date_hired: '2016-09-12' },
-    { id: 9, name: 'Ivy League', department: 'Education', position: 'Instructor', email: 'ivy.l@example.com', phone: '555-0109', date_hired: '2015-07-07' },
-    { id: 10, name: 'Jack Sparrow', department: 'Logistics', position: 'Captain', email: 'jack.s@example.com', phone: '555-0110', date_hired: '2014-12-25' },
-    { id: 11, name: 'Kara Danvers', department: 'Media', position: 'Reporter', email: 'kara.d@example.com', phone: '555-0111', date_hired: '2013-04-18' }
+    { id: 1, name: 'Alice Johnson', department: 'Engineering', position: 'Software Engineer', email: 'alice.j@example.com', phone: '555-0101', date_hired: '2020-01-15' },
+    { id: 2, name: 'Bob Smith', department: 'Marketing', position: 'Marketing Manager', email: 'bob.s@example.com', phone: '555-0102', date_hired: '2019-03-22' },
+    { id: 3, name: 'Charlie Brown', department: 'Sales', position: 'Sales Executive', email: 'charlie.b@example.com', phone: '555-0103', date_hired: '2018-07-11' },
+    { id: 4, name: 'Diana Prince', department: 'HR', position: 'HR Specialist', email: 'diana.p@example.com', phone: '555-0104', date_hired: '2021-05-30' },
+    { id: 5, name: 'Eve Adams', department: 'Finance', position: 'Accountant', email: 'eve.a@example.com', phone: '555-0105', date_hired: '2017-09-18' }
   ]);
   employees = this._employees.asReadonly();
-
-  private _paginationState = signal({ currentPage: 1, totalRecords: this._employees().length, recordsPerPage: 10 });
-  paginationState = this._paginationState.asReadonly();
-
-  paginatedEmployees = computed(() => {
-    const start = (this.paginationState().currentPage - 1) * this.paginationState().recordsPerPage;
-    const end = start + this.paginationState().recordsPerPage;
-    return this.employees().slice(start, end);
-  });
-
-  totalRecords = computed(() => this.employees().length);
-  totalPages = computed(() => Math.ceil(this.totalRecords() / this.paginationState().recordsPerPage));
-  currentPage = computed(() => this.paginationState().currentPage);
-
-  nextPage() {
-    if (this.currentPage() < this.totalPages()) {
-      this._paginationState.update(state => ({ ...state, currentPage: state.currentPage + 1 }));
-    }
-  }
-
-  previousPage() {
-    if (this.currentPage() > 1) {
-      this._paginationState.update(state => ({ ...state, currentPage: state.currentPage - 1 }));
-    }
-  }
-
-  firstPage() {
-    this._paginationState.update(state => ({ ...state, currentPage: 1 }));
-  }
-
-  lastPage() {
-    this._paginationState.update(state => ({ ...state, currentPage: this.totalPages() }));
-  }
-
-  jumpToPage: number = 1;
-
-  goToPage() {
-    if (this.jumpToPage >= 1 && this.jumpToPage <= this.totalPages()) {
-      this._paginationState.update(state => ({ ...state, currentPage: this.jumpToPage }));
-    }
-  }
 
   newEmployeeName = '';
   newEmployeeDepartment = '';
@@ -232,9 +163,14 @@ export class EmployeeDetailComponent {
   newEmployeePhone = '';
   newEmployeeDateHired = '';
 
+  showEditModal = false;
+  showModal = false;
+  editEmployeeData: Employee | null = null;
+  employeeToDelete: Employee | null = null;
+
   addEmployee() {
     const newEmployee: Employee = {
-      id: this.totalRecords() + 1,
+      id: Date.now(),
       name: this.newEmployeeName,
       department: this.newEmployeeDepartment,
       position: this.newEmployeePosition,
@@ -243,7 +179,6 @@ export class EmployeeDetailComponent {
       date_hired: this.newEmployeeDateHired
     };
     this._employees.update(list => [...list, newEmployee]);
-    this._paginationState.update(state => ({ ...state, totalRecords: this.totalRecords() }));
     this.clearForm();
   }
 
@@ -256,9 +191,6 @@ export class EmployeeDetailComponent {
     this.newEmployeeDateHired = '';
   }
 
-  showEditModal = false;
-  editEmployeeData: Employee | null = null;
-
   editEmployee(employee: Employee) {
     this.editEmployeeData = { ...employee };
     this.showEditModal = true;
@@ -267,7 +199,7 @@ export class EmployeeDetailComponent {
   saveEmployee() {
     if (this.editEmployeeData) {
       this._employees.update(list => list.map(e => e.id === this.editEmployeeData!.id ? this.editEmployeeData! : e));
-      this.showEditModal = false;
+      this.cancelEdit();
     }
   }
 
@@ -276,20 +208,15 @@ export class EmployeeDetailComponent {
     this.editEmployeeData = null;
   }
 
-  showModal = false;
-  employeeToDelete: Employee | null = null;
-
   confirmDelete(id: number) {
-    this.employeeToDelete = this.employees().find(e => e.id === id) || null;
+    this.employeeToDelete = this._employees().find(e => e.id === id) || null;
     this.showModal = true;
   }
 
   deleteEmployee() {
     if (this.employeeToDelete) {
       this._employees.update(list => list.filter(e => e.id !== this.employeeToDelete!.id));
-      this._paginationState.update(state => ({ ...state, totalRecords: this.totalRecords() }));
-      this.showModal = false;
-      this.employeeToDelete = null;
+      this.cancelDelete();
     }
   }
 

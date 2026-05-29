@@ -1,7 +1,6 @@
-from dataclasses import dataclass
+from typing import TypedDict
 
-@dataclass
-class EmployeeRecord:
+class EmployeeRecord(TypedDict):
     id: int
     name: str
     department: str
@@ -9,9 +8,3 @@ class EmployeeRecord:
     email: str
     phone: str
     date_hired: str
-
-@dataclass
-class PaginationState:
-    current_page: int
-    total_records: int
-    records_per_page: int = 10

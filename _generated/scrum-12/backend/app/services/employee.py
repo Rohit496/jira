@@ -1,3 +1,3 @@
-def fetch_employees(page: int, per_page: int):
-    # Placeholder for service logic to fetch employees
-    pass
+def fetch_employees():
+    # Placeholder for fetching employees from a database
+    return []
