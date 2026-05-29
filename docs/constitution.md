@@ -1,28 +1,28 @@
 # Constitution: Fix the Pagination Design
 
 ## 1. Code quality
-- Ensure small, focused modules for pagination components.
-- Use type hints for all functions and components related to pagination.
-- Eliminate any dead code related to previous pagination implementations.
-- Maintain clear and descriptive naming conventions for all pagination-related variables and functions.
+- Use small, focused modules to enhance readability and maintainability.
+- Implement type hints for better code clarity and error prevention.
+- Eliminate any dead code to ensure a clean codebase.
+- Adopt clear and descriptive naming conventions for functions and variables.
 
 ## 2. Testing standards
-- Implement unit tests for all pagination logic to ensure correctness.
-- Include a smoke import test to verify that the pagination component loads without errors.
-- Ensure that all tests are stable and do not produce flaky results.
-- Utilize pytest as the exclusive testing framework for all pagination tests.
+- Write unit tests for all pure logic to ensure functionality and prevent regressions.
+- Include a smoke import test to verify the pagination component's integration.
+- Ensure no flaky tests are present to maintain reliability in the testing suite.
+- Utilize pytest as the exclusive testing framework for consistency.
 
 ## 3. User experience
-- Design the pagination UI to be responsive across all devices and screen sizes.
-- Clearly indicate loading and error states during pagination actions.
+- Design a responsive UI that adapts seamlessly across different devices and screen sizes.
+- Implement loading and error states to provide feedback during data fetching.
 - Adhere to accessibility standards at the AA level to ensure usability for all users.
-- Maintain consistent component patterns throughout the pagination design to enhance familiarity and usability.
+- Maintain consistent component patterns to enhance familiarity and usability.
 
 ## 4. Performance
-- Optimize pagination to ensure lightweight payloads for data retrieval.
-- Avoid unnecessary dependencies that could bloat the pagination component.
-- Ensure that the average response time for pagination API calls is less than 1 second for the 50th percentile (p50).
+- Ensure lightweight payloads to optimize loading times and user experience.
+- Avoid unnecessary dependencies that could bloat the application.
+- Aim for a p50 API response time of less than 1 second to ensure quick interactions.
 
 ## 5. Spec-kit discipline
-- The pipeline executes /speckit.specify → /speckit.plan → (Manager approval) → /speckit.tasks → /speckit.implement → tests → deploy.
-- Every downstream artifact related to the pagination design MUST trace back to the output of the previous stage, ensuring a clear lineage and accountability in the development process.
+- The pipeline executes in the following order: /speckit.specify → /speckit.plan → (Manager approval) → /speckit.tasks → /speckit.implement → tests → deploy.
+- Every downstream artifact MUST trace back to the output of the previous stage to maintain traceability and accountability.
