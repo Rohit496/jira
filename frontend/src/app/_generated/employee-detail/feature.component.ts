@@ -20,7 +20,7 @@ interface Employee {
     <div class="page">
       <header class="page-head">
         <h2>Employees</h2>
-        <span class="count">{{ employees().length }} total</span>
+        <span class="count">{{ totalRecords() }} total</span>
       </header>
 
       <div class="card form-card">
@@ -49,7 +49,7 @@ interface Employee {
             </tr>
           </thead>
           <tbody>
-            @for (e of employees(); track e.id) {
+            @for (e of paginatedEmployees(); track e.id) {
               <tr>
                 <td>{{ e.name }}</td>
                 <td>{{ e.department }}</td>
@@ -68,6 +68,17 @@ interface Employee {
         @if (employees().length === 0) {
           <p class="empty">No employees yet — add one above.</p>
         }
+      </div>
+
+      <div class="pagination-controls">
+        <button class="ghost" (click)="firstPage()" [disabled]="currentPage() === 1">First</button>
+        <button class="ghost" (click)="previousPage()" [disabled]="currentPage() === 1">Previous</button>
+        <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
+        <button class="ghost" (click)="nextPage()" [disabled]="currentPage() === totalPages()">Next</button>
+        <button class="ghost" (click)="lastPage()" [disabled]="currentPage() === totalPages()">Last</button>
+        <select [(ngModel)]="paginationSettings().recordsPerPage" (change)="updateRecordsPerPage()">
+          <option *ngFor="let option of recordsPerPageOptions" [value]="option">{{ option }} per page</option>
+        </select>
       </div>
 
       @if (showEditModal) {
@@ -123,50 +134,43 @@ interface Employee {
     tbody tr { transition: background 0.12s ease; }
     tbody tr:hover { background: var(--bg-2); }
 
-    th.actions, td.actions { text-align: right; white-space: nowrap; }
-    button.sm { min-height: 30px; padding: 0.28rem 0.7rem; font-size: 0.78rem; }
+    .pagination-controls { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; }
+    .pagination-controls button, .pagination-controls select { margin: 0 0.25rem; }
 
-    .empty { padding: 1.75rem; text-align: center; color: var(--text-2); }
-
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(5, 8, 16, 0.66);
-      backdrop-filter: blur(2px);
-      display: flex; align-items: center; justify-content: center;
-      padding: 1rem; z-index: 50;
-    }
-    .modal-card {
-      background: var(--bg-1);
-      border: 1px solid var(--border);
-      border-radius: var(--r-xl);
-      box-shadow: var(--sh-lg);
-      padding: 1.4rem 1.5rem;
-      width: 100%; max-width: 400px;
-    }
-    .modal-card h3 { font-size: 1.05rem; color: var(--text-0); margin-bottom: 0.5rem; }
-  `],
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5, 8, 16, 0.66); display: flex; align-items: center; justify-content: center; }
+    .modal-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: var(--r-xl); box-shadow: var(--sh-lg); padding: 1.5rem; max-width: 500px; width: 100%; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem; }
+    `
+  ],
 })
 export class EmployeeDetailComponent {
   private _employees = signal<Employee[]>([
-    { id: 1, name: 'Alice Johnson', department: 'Engineering', position: 'Software Engineer', email: 'alice.j@example.com', phone: '555-0101', date_hired: '2020-01-15' },
-    { id: 2, name: 'Bob Smith', department: 'Marketing', position: 'Marketing Manager', email: 'bob.s@example.com', phone: '555-0102', date_hired: '2019-03-22' },
-    { id: 3, name: 'Charlie Brown', department: 'Sales', position: 'Sales Executive', email: 'charlie.b@example.com', phone: '555-0103', date_hired: '2018-07-11' },
-    { id: 4, name: 'Diana Prince', department: 'HR', position: 'HR Specialist', email: 'diana.p@example.com', phone: '555-0104', date_hired: '2021-05-30' },
-    { id: 5, name: 'Eve Adams', department: 'Finance', position: 'Accountant', email: 'eve.a@example.com', phone: '555-0105', date_hired: '2017-09-18' }
+    { id: 1, name: 'Alice Johnson', department: 'Engineering', position: 'Developer', email: 'alice.j@example.com', phone: '123-456-7890', date_hired: '2020-01-15' },
+    { id: 2, name: 'Bob Smith', department: 'Marketing', position: 'Manager', email: 'bob.s@example.com', phone: '234-567-8901', date_hired: '2019-03-22' },
+    { id: 3, name: 'Charlie Brown', department: 'Sales', position: 'Salesperson', email: 'charlie.b@example.com', phone: '345-678-9012', date_hired: '2021-06-10' },
+    { id: 4, name: 'Diana Prince', department: 'HR', position: 'HR Specialist', email: 'diana.p@example.com', phone: '456-789-0123', date_hired: '2018-11-05' },
+    { id: 5, name: 'Eve Adams', department: 'Finance', position: 'Accountant', email: 'eve.a@example.com', phone: '567-890-1234', date_hired: '2022-02-28' }
   ]);
   employees = this._employees.asReadonly();
 
-  newEmployeeName = '';
-  newEmployeeDepartment = '';
-  newEmployeePosition = '';
-  newEmployeeEmail = '';
-  newEmployeePhone = '';
-  newEmployeeDateHired = '';
+  private _paginationSettings = signal({
+    currentPage: 1,
+    recordsPerPage: 10
+  });
+  paginationSettings = this._paginationSettings.asReadonly();
 
-  showEditModal = false;
-  showModal = false;
-  editEmployeeData: Employee | null = null;
-  employeeToDelete: Employee | null = null;
+  recordsPerPageOptions = [10, 25, 50];
+
+  paginatedEmployees = computed(() => {
+    const start = (this.paginationSettings().currentPage - 1) * this.paginationSettings().recordsPerPage;
+    const end = start + this.paginationSettings().recordsPerPage;
+    return this.employees().slice(start, end);
+  });
+
+  totalRecords = computed(() => this.employees().length);
+  totalPages = computed(() => Math.ceil(this.totalRecords() / this.paginationSettings().recordsPerPage));
+
+  currentPage = computed(() => this.paginationSettings().currentPage);
 
   addEmployee() {
     const newEmployee: Employee = {
@@ -179,10 +183,10 @@ export class EmployeeDetailComponent {
       date_hired: this.newEmployeeDateHired
     };
     this._employees.update(list => [...list, newEmployee]);
-    this.clearForm();
+    this.clearNewEmployeeForm();
   }
 
-  clearForm() {
+  clearNewEmployeeForm() {
     this.newEmployeeName = '';
     this.newEmployeeDepartment = '';
     this.newEmployeePosition = '';
@@ -191,16 +195,34 @@ export class EmployeeDetailComponent {
     this.newEmployeeDateHired = '';
   }
 
+  updateRecordsPerPage() {
+    this._paginationSettings.update(settings => ({ ...settings, currentPage: 1 }));
+  }
+
+  firstPage() {
+    this._paginationSettings.update(settings => ({ ...settings, currentPage: 1 }));
+  }
+
+  previousPage() {
+    this._paginationSettings.update(settings => ({ ...settings, currentPage: Math.max(1, settings.currentPage - 1) }));
+  }
+
+  nextPage() {
+    this._paginationSettings.update(settings => ({ ...settings, currentPage: Math.min(this.totalPages(), settings.currentPage + 1) }));
+  }
+
+  lastPage() {
+    this._paginationSettings.update(settings => ({ ...settings, currentPage: this.totalPages() }));
+  }
+
   editEmployee(employee: Employee) {
     this.editEmployeeData = { ...employee };
     this.showEditModal = true;
   }
 
   saveEmployee() {
-    if (this.editEmployeeData) {
-      this._employees.update(list => list.map(e => e.id === this.editEmployeeData!.id ? this.editEmployeeData! : e));
-      this.cancelEdit();
-    }
+    this._employees.update(list => list.map(e => e.id === this.editEmployeeData!.id ? this.editEmployeeData! : e));
+    this.cancelEdit();
   }
 
   cancelEdit() {
@@ -209,7 +231,7 @@ export class EmployeeDetailComponent {
   }
 
   confirmDelete(id: number) {
-    this.employeeToDelete = this._employees().find(e => e.id === id) || null;
+    this.employeeToDelete = this.employees().find(e => e.id === id) || null;
     this.showModal = true;
   }
 
@@ -224,4 +246,17 @@ export class EmployeeDetailComponent {
     this.showModal = false;
     this.employeeToDelete = null;
   }
+
+  newEmployeeName = '';
+  newEmployeeDepartment = '';
+  newEmployeePosition = '';
+  newEmployeeEmail = '';
+  newEmployeePhone = '';
+  newEmployeeDateHired = '';
+
+  showEditModal = false;
+  editEmployeeData: Employee | null = null;
+
+  showModal = false;
+  employeeToDelete: Employee | null = null;
 }

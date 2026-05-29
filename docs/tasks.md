@@ -1,75 +1,66 @@
 # Task Breakdown: Employee Detail Pagination
 
-### Task 1: Create EmployeeRecord Data Model
-- **Goal:** Define the data structure for employee records.
+### Task 1: Create Data Models
+- **Goal:** Define the data models for employee records and pagination settings.
 - **Files:** 
   - `src/models.py`
 - **Acceptance:** 
-  - The `EmployeeRecord` dataclass is implemented with the required fields.
+  - The `EmployeeRecord` and `PaginationSettings` classes are defined with the correct attributes.
 - **Depends on:** none
 - **Size:** S
 
-### Task 2: Create PaginationSettings Data Model
-- **Goal:** Define the data structure for pagination settings.
-- **Files:** 
-  - `src/models.py`
-- **Acceptance:** 
-  - The `PaginationSettings` TypedDict is implemented with the required fields.
-- **Depends on:** Task 1
-- **Size:** S
-
-### Task 3: Implement PaginationController
-- **Goal:** Manage pagination logic and user preferences.
+### Task 2: Implement Pagination Logic
+- **Goal:** Develop the `PaginationController` to manage pagination state and logic.
 - **Files:** 
   - `src/pagination_controller.py`
 - **Acceptance:** 
-  - Pagination logic is implemented to retrieve the correct number of records per page.
-  - User preferences for records per page are stored and retrieved.
+  - The `PaginationController` can calculate total pages based on records per page and current page.
+  - It can navigate to the next and previous pages.
+- **Depends on:** Task 1
+- **Size:** M
+
+### Task 3: Create Pagination View
+- **Goal:** Build the `PaginationView` to render pagination controls.
+- **Files:** 
+  - `src/pagination_view.py`
+- **Acceptance:** 
+  - The `PaginationView` displays "Previous" and "Next" buttons and the current page number.
+  - It shows the total number of pages.
 - **Depends on:** Task 2
 - **Size:** M
 
-### Task 4: Create EmployeeTable Component
-- **Goal:** Display employee records in a tabular format.
+### Task 4: Integrate Employee Table with Pagination
+- **Goal:** Connect the `EmployeeTable` component with pagination controls.
 - **Files:** 
   - `src/employee_table.py`
 - **Acceptance:** 
-  - Employee records are displayed correctly in a table format.
-  - The table updates based on pagination settings.
+  - The `EmployeeTable` displays employee records and integrates with `PaginationController` and `PaginationView`.
+  - Pagination controls are displayed at the bottom of the employee detail table.
 - **Depends on:** Task 3
-- **Size:** M
+- **Size:** L
 
-### Task 5: Implement PaginationControls Component
-- **Goal:** Provide navigation buttons and record count selection.
+### Task 5: Implement Metrics Logging
+- **Goal:** Create a `MetricsLogger` to log pagination usage metrics.
 - **Files:** 
-  - `src/pagination_controls.py`
+  - `src/metrics_logger.py`
 - **Acceptance:** 
-  - Navigation buttons (Next, Previous, First, Last) function correctly.
-  - Users can select the number of records displayed per page.
-- **Depends on:** Task 3
+  - The `MetricsLogger` can log the timestamp, page viewed, and records displayed.
+- **Depends on:** Task 1
 - **Size:** M
 
-### Task 6: Integrate Components and Display Current Page Info
-- **Goal:** Combine components and display current page number and total records.
+### Task 6: Create Main Application Entry Point
+- **Goal:** Set up the main application to run the employee detail pagination feature.
 - **Files:** 
   - `src/main.py`
 - **Acceptance:** 
-  - The current page number and total records are displayed accurately.
-  - All components work together seamlessly to provide pagination functionality.
+  - The application starts and displays the employee detail table with pagination controls.
+  - The pagination feature loads within the specified performance requirements.
 - **Depends on:** Task 4, Task 5
 - **Size:** L
 
-### Task 7: Create Smoke Test Entry Point
-- **Goal:** Provide a demo entry point for the pagination feature.
-- **Files:** 
-  - `src/demo.py`
-- **Acceptance:** 
-  - The demo runs successfully and showcases the pagination feature with sample data.
-- **Depends on:** Task 6
-- **Size:** S
-
 ## Traceability
-- Pagination displays the correct number of employee records per page. → Task 3, Task 4
-- Users can select the number of records displayed per page. → Task 5
-- Navigation controls function correctly, allowing users to move between pages. → Task 5
-- The current page number and total records are displayed accurately. → Task 6
-- User preferences for records per page are retained during navigation. → Task 3
+- **AC1:** Task 4
+- **AC2:** Task 4
+- **AC3:** Task 3
+- **AC4:** Task 2, Task 4
+- **AC5:** Task 6
