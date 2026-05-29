@@ -1,7 +1,6 @@
 from fastapi import APIRouter
+from backend.app.models.employee import Employee
 
 router = APIRouter()
 
-@router.get("/employees")
-async def get_employees():
-    return []
+# Define your routes here

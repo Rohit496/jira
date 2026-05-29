@@ -1,15 +1,5 @@
 from typing import List
-from dataclasses import dataclass
-
-@dataclass
-class Employee:
-    id: int
-    name: str
-    department: str
-    position: str
-    email: str
-    phone: str
-    date_hired: str
+from backend.app.models.employee import Employee
 
 
 def paginate_employees(employees: List[Employee], page: int, per_page: int) -> List[Employee]:
