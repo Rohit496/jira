@@ -1,79 +1,64 @@
-# Task Breakdown: Employee Component Pagination
+# Task Breakdown: Fix the Modal UI for Deleting Employee
 
-### Task 1: Set Up Project Structure
-- **Goal:** Create the initial project structure for the pagination feature.
+### Task 1: Create Modal Component
+- **Goal:** Implement the modal UI component that will display the warning message and buttons.
 - **Files:** 
-  - `src/__init__.py`
-  - `src/app.py`
+  - `src/modal.py`
 - **Acceptance:** 
-  - Project structure is created with necessary files.
-  - The application can be run without errors.
+  - The modal displays a clear warning message about the permanent deletion.
+  - The modal includes "Confirm" and "Cancel" buttons.
 - **Depends on:** none
-- **Size:** S
+- **Size:** M
 
-### Task 2: Implement Pagination State Management
-- **Goal:** Create the `PaginationState` class to manage pagination data.
+### Task 2: Implement Confirmation Logic
+- **Goal:** Add logic to handle user actions on the modal buttons.
 - **Files:** 
-  - `src/pagination.py`
+  - `src/confirmation_logic.py`
 - **Acceptance:** 
-  - `PaginationState` class is implemented with `current_page`, `total_records`, and `records_per_page` attributes.
-  - The class can be instantiated and its attributes can be set and retrieved.
+  - The modal closes automatically after confirming deletion and shows a success message.
+  - The modal remains open when the "Cancel" button is clicked.
 - **Depends on:** Task 1
 - **Size:** M
 
-### Task 3: Create Pagination Controller
-- **Goal:** Implement the `PaginationController` to manage pagination logic.
+### Task 3: Ensure Visual Consistency
+- **Goal:** Apply existing design guidelines to the modal for visual consistency.
 - **Files:** 
-  - `src/pagination_controller.py`
+  - `src/modal.py` (modifications)
 - **Acceptance:** 
-  - `PaginationController` can calculate total pages based on records per page.
-  - It can update the current page based on user navigation.
+  - The modal design is consistent with the application’s existing UI.
+- **Depends on:** Task 1
+- **Size:** S
+
+### Task 4: Implement User Feedback Module
+- **Goal:** Create a feedback mechanism to inform users of successful deletion.
+- **Files:** 
+  - `src/user_feedback.py`
+- **Acceptance:** 
+  - The modal closes automatically after confirming deletion and shows a success message.
 - **Depends on:** Task 2
 - **Size:** M
 
-### Task 4: Develop Employee List Component
-- **Goal:** Create the `EmployeeList` component to display employee records.
+### Task 5: Add Logging for User Interactions
+- **Goal:** Implement logging to track user interactions with the modal.
 - **Files:** 
-  - `src/employee_list.py`
+  - `src/logging_service.py`
 - **Acceptance:** 
-  - `EmployeeList` can render a list of employee records based on the current page.
-  - It correctly displays the number of records per page.
-- **Depends on:** Task 3
-- **Size:** M
+  - User interactions are logged for future analysis.
+- **Depends on:** Task 2
+- **Size:** S
 
-### Task 5: Implement Pagination Controls
-- **Goal:** Create the `PaginationControls` component for user navigation.
-- **Files:** 
-  - `src/pagination_controls.py`
-- **Acceptance:** 
-  - Pagination controls include "Next", "Previous", and page number input.
-  - Controls are accessible via keyboard navigation.
-- **Depends on:** Task 4
-- **Size:** M
-
-### Task 6: Add Logging Functionality
-- **Goal:** Implement logging for user interactions with pagination.
-- **Files:** 
-  - `src/logger.py`
-- **Acceptance:** 
-  - User interactions are logged correctly.
-  - Logs can be retrieved for monitoring purposes.
-- **Depends on:** Task 5
-- **Size:** M
-
-### Task 7: Create Main Application Entry Point
-- **Goal:** Set up the main application to integrate all components and run the server.
+### Task 6: Create Smoke Test Entry Point
+- **Goal:** Develop a main entry point to demonstrate the modal functionality.
 - **Files:** 
   - `src/main.py`
 - **Acceptance:** 
-  - The application runs and displays employee records with pagination.
-  - All components function together without errors.
-- **Depends on:** Task 6
-- **Size:** L
+  - The modal displays correctly and functions as intended when the application is run.
+- **Depends on:** Tasks 1, 2, 4
+- **Size:** M
 
 ## Traceability
-- Users can configure the number of records displayed per page. (Task 2)
-- "Next" and "Previous" buttons function correctly and navigate through pages. (Task 5)
-- Users can enter a page number to jump directly to that page. (Task 3)
-- The total number of employee records and the current page number are displayed accurately. (Task 4)
-- Pagination controls are accessible via keyboard navigation. (Task 5)
+- The modal displays a clear warning message about the permanent deletion. (Task 1)
+- The modal includes "Confirm" and "Cancel" buttons. (Task 1)
+- The modal design is consistent with the application’s existing UI. (Task 3)
+- The modal closes automatically after confirming deletion and shows a success message. (Tasks 4, 2)
+- The modal remains open when the "Cancel" button is clicked. (Task 2)
