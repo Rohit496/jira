@@ -130,46 +130,58 @@ interface Employee {
     thead th { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-2); font-weight: 600; padding: 0.7rem 0; }
     tbody tr { border-top: 1px solid var(--border); }
     tbody tr:hover { background: var(--bg-2); }
-    td { padding: 0.7rem 0.5rem; color: var(--text-1); }
+
     .actions { text-align: right; }
     .button-group { display: flex; gap: 0.5rem; }
 
-    .pagination-controls { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; }
-    .pagination-controls input { width: auto; margin: 0 0.5rem; }
-    .pagination-controls select { width: auto; }
+    .pagination-controls { display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 1rem; }
+    .pagination-controls button, .pagination-controls select { width: auto; }
+    .pagination-controls span { color: var(--text-1); }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5, 8, 16, 0.66); display: flex; align-items: center; justify-content: center; }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5, 8, 16, 0.66); display: flex; justify-content: center; align-items: center; }
     .modal-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: var(--r-xl); box-shadow: var(--sh-lg); padding: 1.5rem; max-width: 500px; width: 100%; }
     .modal-actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem; }
-    .empty { color: var(--text-2); font-size: 0.9rem; padding: 1rem; text-align: center; }
+    .empty { color: var(--text-2); font-style: italic; }
     `
   ],
 })
 export class EmployeeDetailComponent {
   private _employees = signal<Employee[]>([
-    { id: 1, name: 'Alice Johnson', department: 'Engineering', position: 'Software Engineer', email: 'alice.johnson@example.com', phone: '555-0101', date_hired: '2020-01-15' },
-    { id: 2, name: 'Bob Smith', department: 'Marketing', position: 'Marketing Manager', email: 'bob.smith@example.com', phone: '555-0102', date_hired: '2019-03-22' },
-    { id: 3, name: 'Charlie Brown', department: 'Sales', position: 'Sales Executive', email: 'charlie.brown@example.com', phone: '555-0103', date_hired: '2021-07-30' },
-    { id: 4, name: 'Diana Prince', department: 'HR', position: 'HR Specialist', email: 'diana.prince@example.com', phone: '555-0104', date_hired: '2018-11-12' },
-    { id: 5, name: 'Eve Adams', department: 'Finance', position: 'Accountant', email: 'eve.adams@example.com', phone: '555-0105', date_hired: '2022-05-18' }
+    { id: 1, name: 'Alice Johnson', department: 'Engineering', position: 'Software Engineer', email: 'alice.johnson@example.com', phone: '555-1234', date_hired: '2021-01-15' },
+    { id: 2, name: 'Bob Smith', department: 'Marketing', position: 'Marketing Manager', email: 'bob.smith@example.com', phone: '555-5678', date_hired: '2020-06-23' },
+    { id: 3, name: 'Charlie Brown', department: 'Sales', position: 'Sales Executive', email: 'charlie.brown@example.com', phone: '555-8765', date_hired: '2019-11-30' },
+    { id: 4, name: 'Diana Prince', department: 'HR', position: 'HR Specialist', email: 'diana.prince@example.com', phone: '555-4321', date_hired: '2022-03-12' },
+    { id: 5, name: 'Eve Adams', department: 'Finance', position: 'Accountant', email: 'eve.adams@example.com', phone: '555-6789', date_hired: '2021-09-05' }
   ]);
   employees = this._employees.asReadonly();
 
-  private _paginationSettings = signal({ currentPage: 1, recordsPerPage: 2 });
-  paginationSettings = this._paginationSettings.asReadonly();
+  newEmployeeName = '';
+  newEmployeeDepartment = '';
+  newEmployeePosition = '';
+  newEmployeeEmail = '';
+  newEmployeePhone = '';
+  newEmployeeDateHired = '';
 
-  recordsPerPageOptions = [2, 5, 10];
-  jumpToPage: number = 1;
+  editEmployeeData: Employee | null = null;
+  showEditModal = false;
+  showModal = false;
+  employeeToDelete: Employee | null = null;
 
-  totalRecords = computed(() => this._employees().length);
+  paginationSettings = signal({ currentPage: 1, recordsPerPage: 2 });
+  jumpToPage = 1;
+
+  recordsPerPageOptions = [2, 3, 5];
+
+  totalRecords = computed(() => this.employees().length);
   totalPages = computed(() => Math.ceil(this.totalRecords() / this.paginationSettings().recordsPerPage));
-  currentPage = computed(() => this.paginationSettings().currentPage);
 
   paginatedEmployees = computed(() => {
-    const start = (this.currentPage() - 1) * this.paginationSettings().recordsPerPage;
+    const start = (this.paginationSettings().currentPage - 1) * this.paginationSettings().recordsPerPage;
     const end = start + this.paginationSettings().recordsPerPage;
-    return this._employees().slice(start, end);
+    return this.employees().slice(start, end);
   });
+
+  currentPage = computed(() => this.paginationSettings().currentPage);
 
   addEmployee() {
     const newEmployee: Employee = {
@@ -182,10 +194,10 @@ export class EmployeeDetailComponent {
       date_hired: this.newEmployeeDateHired
     };
     this._employees.update(list => [...list, newEmployee]);
-    this.clearNewEmployeeFields();
+    this.clearNewEmployeeForm();
   }
 
-  clearNewEmployeeFields() {
+  clearNewEmployeeForm() {
     this.newEmployeeName = '';
     this.newEmployeeDepartment = '';
     this.newEmployeePosition = '';
@@ -194,48 +206,16 @@ export class EmployeeDetailComponent {
     this.newEmployeeDateHired = '';
   }
 
-  updateRecordsPerPage() {
-    this._paginationSettings.update(settings => ({ ...settings, currentPage: 1 }));
-  }
-
-  firstPage() {
-    this._paginationSettings.update(settings => ({ ...settings, currentPage: 1 }));
-  }
-
-  lastPage() {
-    this._paginationSettings.update(settings => ({ ...settings, currentPage: this.totalPages() }));
-  }
-
-  nextPage() {
-    if (this.currentPage() < this.totalPages()) {
-      this._paginationSettings.update(settings => ({ ...settings, currentPage: settings.currentPage + 1 }));
-    }
-  }
-
-  previousPage() {
-    if (this.currentPage() > 1) {
-      this._paginationSettings.update(settings => ({ ...settings, currentPage: settings.currentPage - 1 }));
-    }
-  }
-
-  jumpToPageHandler() {
-    if (this.jumpToPage >= 1 && this.jumpToPage <= this.totalPages()) {
-      this._paginationSettings.update(settings => ({ ...settings, currentPage: this.jumpToPage }));
-    }
-  }
-
-  trackById(index: number, item: Employee) {
-    return item.id;
-  }
-
   editEmployee(employee: Employee) {
     this.editEmployeeData = { ...employee };
     this.showEditModal = true;
   }
 
   saveEmployee() {
-    this._employees.update(list => list.map(e => e.id === this.editEmployeeData!.id ? this.editEmployeeData! : e));
-    this.cancelEdit();
+    if (this.editEmployeeData) {
+      this._employees.update(list => list.map(e => e.id === this.editEmployeeData!.id ? this.editEmployeeData! : e));
+      this.cancelEdit();
+    }
   }
 
   cancelEdit() {
@@ -244,7 +224,7 @@ export class EmployeeDetailComponent {
   }
 
   confirmDelete(id: number) {
-    this.employeeToDelete = this._employees().find(e => e.id === id) || null;
+    this.employeeToDelete = this.employees().find(e => e.id === id) || null;
     this.showModal = true;
   }
 
@@ -260,16 +240,37 @@ export class EmployeeDetailComponent {
     this.employeeToDelete = null;
   }
 
-  newEmployeeName = '';
-  newEmployeeDepartment = '';
-  newEmployeePosition = '';
-  newEmployeeEmail = '';
-  newEmployeePhone = '';
-  newEmployeeDateHired = '';
+  firstPage() {
+    this.paginationSettings.update(settings => ({ ...settings, currentPage: 1 }));
+  }
 
-  showEditModal = false;
-  editEmployeeData: Employee | null = null;
+  lastPage() {
+    this.paginationSettings.update(settings => ({ ...settings, currentPage: this.totalPages() }));
+  }
 
-  showModal = false;
-  employeeToDelete: Employee | null = null;
+  nextPage() {
+    if (this.currentPage() < this.totalPages()) {
+      this.paginationSettings.update(settings => ({ ...settings, currentPage: this.currentPage() + 1 }));
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage() > 1) {
+      this.paginationSettings.update(settings => ({ ...settings, currentPage: this.currentPage() - 1 }));
+    }
+  }
+
+  jumpToPageHandler() {
+    if (this.jumpToPage >= 1 && this.jumpToPage <= this.totalPages()) {
+      this.paginationSettings.update(settings => ({ ...settings, currentPage: this.jumpToPage }));
+    }
+  }
+
+  updateRecordsPerPage() {
+    this.paginationSettings.update(settings => ({ ...settings, currentPage: 1 }));
+  }
+
+  trackById(index: number, item: Employee) {
+    return item.id;
+  }
 }
