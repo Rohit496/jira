@@ -1,64 +1,64 @@
-# Technical Plan: Employee Component Pagination
+# Technical Plan: Fix the Pagination Design
 
 ## 1. Approach
-To implement the pagination feature for the employee component, we will create a user interface that allows users to navigate through employee records efficiently. This will involve displaying a configurable number of records per page, providing navigation controls, and ensuring accessibility and performance standards are met.
+We will enhance the pagination design by creating a visually distinct component that clearly displays page numbers, highlights the current page, and includes "First" and "Last" buttons for easy navigation. The design will be responsive and provide interactive feedback, ensuring a seamless user experience across various devices.
 
 ## 2. Architecture
 - **Components:**
-  - `PaginationController`: Manages pagination logic and state.
-  - `EmployeeList`: Renders the list of employee records.
-  - `PaginationControls`: Provides UI elements for navigation (Next, Previous, page number input).
-  - `Logger`: Handles logging of user interactions.
-
-- **Interaction Diagram:**
+  - `Pagination`: Main component for rendering pagination controls.
+  - `PageButton`: Sub-component for individual page buttons.
+  - `FirstLastButton`: Sub-component for "First" and "Last" buttons.
+  
+- **Interactions:**
   ```
-  PaginationController
-      ├──> EmployeeList
-      ├──> PaginationControls
-      └──> Logger
+  Pagination
+  ├── PageButton (for each page number)
+  ├── FirstLastButton (for "First" and "Last")
+  └── User Interaction (click, hover)
   ```
 
 ## 3. Data model
-- **Entities:**
-  - `EmployeeRecord`: Represents an employee.
-    - `id: int`
-    - `name: str`
-    - `position: str`
-    - `department: str`
+- `PaginationConfig`: 
+  - `total_pages: int`
+  - `current_page: int`
+  - `items_per_page: int`
   
-- **Pagination State:**
-  - `PaginationState`: Represents the current pagination state.
-    - `current_page: int`
-    - `total_records: int`
-    - `records_per_page: int`
+- `PageButton`:
+  - `page_number: int`
+  - `is_current: bool`
+
+- `FirstLastButton`:
+  - `is_first: bool`
+  - `is_last: bool`
 
 ## 4. Tech stack
 - **Language:** Python 3.11+
 - **Libraries:** 
-  - `Flask` for web framework (justified as it simplifies routing and rendering).
-  - `SQLAlchemy` for ORM (justified for efficient data handling).
-  - Standard libraries for logging and configuration.
+  - **React** (for UI components): Necessary for building interactive user interfaces.
+  - **Styled Components** (for styling): Justified for creating dynamic styles based on component state.
 
 ## 5. Key flows
-1. User sets the number of records per page via a configuration option.
-2. The system fetches the total number of employee records.
-3. The `PaginationController` calculates the total pages based on the records per page.
-4. User navigates using "Next" and "Previous" buttons, which update the current page.
-5. User enters a specific page number, and the system fetches and displays the corresponding records.
-6. The total number of records and the current page number are displayed to the user.
-7. User interactions are logged for monitoring.
+1. User navigates to a page with multiple content items.
+2. The `Pagination` component renders with the total number of pages.
+3. Each `PageButton` displays the page number, with the current page highlighted.
+4. "First" and "Last" buttons are visible and functional.
+5. User hovers over buttons to see visual feedback (e.g., color change).
+6. User clicks on a page number or "First"/"Last" button to navigate.
+7. The pagination component updates to reflect the new current page.
 
 ## 6. Risks & mitigations
-- **Risk:** Performance issues with large datasets.
-  - **Mitigation:** Implement efficient data fetching and caching strategies.
+- **Risk:** The design may not be responsive on all devices.
+  - **Mitigation:** Implement thorough testing across various screen sizes and use CSS media queries.
+  
+- **Risk:** Performance issues if the component does not load quickly.
+  - **Mitigation:** Optimize component rendering and minimize re-renders by using React's memoization techniques.
+
 - **Risk:** Accessibility compliance may be overlooked.
-  - **Mitigation:** Conduct accessibility testing and adhere to WCAG 2.1 standards.
-- **Risk:** User confusion with pagination controls.
-  - **Mitigation:** Provide clear labeling and tooltips for navigation elements.
+  - **Mitigation:** Conduct accessibility audits and user testing with assistive technologies.
 
 ## 7. Definition of done
-- Users can configure the number of records displayed per page (Functional Requirement 1).
-- "Next" and "Previous" buttons function correctly and navigate through pages (Functional Requirement 2).
-- Users can enter a page number to jump directly to that page (Functional Requirement 3).
-- The total number of employee records and the current page number are displayed accurately (Functional Requirement 4).
-- Pagination controls are accessible via keyboard navigation (Functional Requirement 5).
+- The pagination component displays page numbers clearly. (Acceptance Criterion 1)
+- The current page number is visually distinct from other page numbers. (Acceptance Criterion 2)
+- "First" and "Last" buttons are present and functional. (Acceptance Criterion 3)
+- The pagination design is responsive across different devices and screen sizes. (Acceptance Criterion 4)
+- Hover effects are present on pagination controls to indicate interactivity. (Acceptance Criterion 5)
