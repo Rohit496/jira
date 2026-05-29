@@ -1,28 +1,28 @@
-# Constitution: Employee Component Pagination
+# Constitution: Delete the Pagination in Employee
 
 ## 1. Code quality
-- Maintain small, focused modules to enhance readability and maintainability.
-- Utilize type hints for all function signatures to improve code clarity.
-- Eliminate dead code to ensure a clean codebase.
-- Use clear and descriptive naming conventions for variables, functions, and components.
+- Code must be modular and focused on single responsibilities.
+- Utilize type hints for all function signatures to enhance readability and maintainability.
+- Ensure there is no dead code; remove any unused functions or variables.
+- Use clear and descriptive naming conventions for variables and functions to improve code clarity.
 
 ## 2. Testing standards
-- Implement unit tests for all pure logic to ensure correctness.
-- Include a smoke import test to verify that the component integrates correctly.
-- Ensure no flaky tests are present; tests must be reliable and consistent.
-- Use pytest as the sole testing framework for all test cases.
+- Implement unit tests for all pure logic components to ensure correctness.
+- A smoke import test is required to verify that the application starts without errors.
+- Ensure that all tests are stable and do not produce flaky results.
+- Use pytest as the exclusive testing framework for consistency and reliability.
 
 ## 3. User experience
-- Design a responsive UI that adapts seamlessly to various screen sizes.
-- Clearly indicate loading and error states to enhance user feedback.
-- Adhere to accessibility standards at level AA to ensure inclusivity.
-- Maintain consistent component patterns to provide a uniform experience across the application.
+- Ensure the user interface is responsive across all devices and screen sizes.
+- Implement loading and error states to provide feedback during data fetching.
+- Adhere to accessibility standards at least at the AA level to ensure inclusivity.
+- Maintain consistent patterns in component design to enhance usability and familiarity.
 
 ## 4. Performance
-- Optimize for lightweight payloads to minimize data transfer and improve load times.
-- Avoid unnecessary dependencies to keep the component lean and efficient.
-- Ensure that the API response time is under 1 second for the 50th percentile (p50).
+- Optimize payloads to be lightweight, minimizing data transfer and improving load times.
+- Avoid unnecessary dependencies that could bloat the application size and impact performance.
+- Ensure that the p50 API response time is under 1 second to provide a smooth user experience.
 
 ## 5. Spec-kit discipline
-- The pipeline executes in the following order: /speckit.specify → /speckit.plan → (Manager approval) → /speckit.tasks → /speckit.implement → tests → deploy.
-- Every downstream artifact MUST trace back to the output of the previous stage to ensure traceability and accountability.
+- The pipeline must execute in the following order: /speckit.specify → /speckit.plan → (Manager approval) → /speckit.tasks → /speckit.implement → tests → deploy.
+- Every downstream artifact must trace back to the output of the previous stage to ensure accountability and traceability throughout the development process.
