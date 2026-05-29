@@ -20,4 +20,4 @@
 - `docs/plan.md`
 - `docs/spec.md`
 - `docs/tasks.md`
-- `frontend/src/app/_generated/employee/feature.component.ts`
+- `frontend/src/app/_generated/employee-detail/feature.component.ts`
