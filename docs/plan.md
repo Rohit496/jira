@@ -1,64 +1,70 @@
-# Technical Plan: Employee Component Pagination
+# Technical Plan: Employee Detail Pagination
 
 ## 1. Approach
-To implement the pagination feature for the employee component, we will create a user interface that allows users to navigate through employee records efficiently. This will involve displaying a configurable number of records per page, providing navigation controls, and ensuring accessibility and performance standards are met.
+To implement the pagination feature for the employee detail table, we will create a modular system that allows users to navigate through employee records efficiently. This will involve developing pagination controls that display the total number of pages, the current page number, and options for selecting the number of records per page, while ensuring performance and accessibility standards are met.
 
 ## 2. Architecture
 - **Components:**
   - `PaginationController`: Manages pagination logic and state.
-  - `EmployeeList`: Renders the list of employee records.
-  - `PaginationControls`: Provides UI elements for navigation (Next, Previous, page number input).
-  - `Logger`: Handles logging of user interactions.
+  - `EmployeeTable`: Displays employee records and integrates pagination controls.
+  - `PaginationView`: Renders pagination controls (Previous, Next, page numbers).
+  - `MetricsLogger`: Logs pagination usage metrics.
 
 - **Interaction Diagram:**
   ```
-  PaginationController
-      ├──> EmployeeList
-      ├──> PaginationControls
-      └──> Logger
+  EmployeeTable
+      ├──> PaginationController
+      │       ├──> PaginationView
+      │       └──> MetricsLogger
+      └──> Employee Data Source
   ```
 
 ## 3. Data model
-- **Entities:**
-  - `EmployeeRecord`: Represents an employee.
-    - `id: int`
-    - `name: str`
-    - `position: str`
-    - `department: str`
+- `EmployeeRecord`: Represents an employee's details.
+  - `id: int`
+  - `name: str`
+  - `position: str`
+  - `department: str`
   
-- **Pagination State:**
-  - `PaginationState`: Represents the current pagination state.
-    - `current_page: int`
-    - `total_records: int`
-    - `records_per_page: int`
+- `PaginationSettings`: Represents user preferences for pagination.
+  - `records_per_page: int`
+  - `current_page: int`
+  
+- `PaginationMetrics`: Represents logged pagination usage.
+  - `timestamp: datetime`
+  - `page_viewed: int`
+  - `records_displayed: int`
 
 ## 4. Tech stack
 - **Language:** Python 3.11+
 - **Libraries:** 
-  - `Flask` for web framework (justified as it simplifies routing and rendering).
-  - `SQLAlchemy` for ORM (justified for efficient data handling).
-  - Standard libraries for logging and configuration.
+  - `Flask` for web framework (justified as it simplifies routing and request handling).
+  - `SQLAlchemy` for ORM (justified for efficient database interactions).
+  - `Flask-Logging` for logging metrics (justified for observability).
 
 ## 5. Key flows
-1. User sets the number of records per page via a configuration option.
-2. The system fetches the total number of employee records.
-3. The `PaginationController` calculates the total pages based on the records per page.
-4. User navigates using "Next" and "Previous" buttons, which update the current page.
-5. User enters a specific page number, and the system fetches and displays the corresponding records.
-6. The total number of records and the current page number are displayed to the user.
-7. User interactions are logged for monitoring.
+1. User accesses the employee detail table.
+2. The system retrieves the total number of employee records.
+3. The user selects the number of records to display per page.
+4. The system calculates the total number of pages based on the selected records per page.
+5. The pagination controls are rendered at the bottom of the table.
+6. The user clicks "Next" or "Previous" to navigate through pages.
+7. The current page and total pages are updated and displayed.
+8. The user's pagination settings are retained when navigating away and returning.
 
 ## 6. Risks & mitigations
 - **Risk:** Performance issues with large datasets.
-  - **Mitigation:** Implement efficient data fetching and caching strategies.
+  - **Mitigation:** Implement server-side pagination to limit data retrieval.
+  
 - **Risk:** Accessibility compliance may be overlooked.
-  - **Mitigation:** Conduct accessibility testing and adhere to WCAG 2.1 standards.
-- **Risk:** User confusion with pagination controls.
-  - **Mitigation:** Provide clear labeling and tooltips for navigation elements.
+  - **Mitigation:** Follow WCAG 2.1 standards during development and testing.
+  
+- **Risk:** User settings may not persist correctly.
+  - **Mitigation:** Use session storage or cookies to retain user preferences.
 
 ## 7. Definition of done
-- Users can configure the number of records displayed per page (Functional Requirement 1).
-- "Next" and "Previous" buttons function correctly and navigate through pages (Functional Requirement 2).
-- Users can enter a page number to jump directly to that page (Functional Requirement 3).
-- The total number of employee records and the current page number are displayed accurately (Functional Requirement 4).
-- Pagination controls are accessible via keyboard navigation (Functional Requirement 5).
+- Pagination controls are displayed at the bottom of the employee detail table (AC1).
+- Users can navigate to the next and previous pages using the pagination controls (AC2).
+- The total number of pages and current page number are correctly displayed (AC3).
+- Users can select the number of records displayed per page, and this setting is retained (AC4).
+- The pagination feature loads within the specified performance requirements (AC5).
