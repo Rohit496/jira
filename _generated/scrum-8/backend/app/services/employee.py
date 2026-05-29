@@ -1,7 +1,3 @@
-from backend.app.models.employee import EmployeeRecord
+from backend.app.models.employee import Employee
 
-class EmployeeService:
-    @staticmethod
-    def fetch_all_employees() -> list[EmployeeRecord]:
-        # Logic to retrieve all employee records
-        return []  # Placeholder for employee data
+# This service would handle business logic related to employees
