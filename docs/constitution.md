@@ -1,28 +1,28 @@
-# Constitution: Fix the Pagination Position in Middle
+# Constitution: Fix Pagination Position in Employee Table
 
 ## 1. Code quality
 - Code must be organized into small, focused modules to enhance readability and maintainability.
-- Use type hints consistently to improve code clarity and facilitate easier debugging.
-- Eliminate any dead code to ensure a clean and efficient codebase.
-- Adopt clear and descriptive naming conventions for variables, functions, and classes to enhance understanding.
+- All functions and variables should include type hints to improve clarity and reduce errors.
+- Dead code must be removed to keep the codebase clean and efficient.
+- Naming conventions should be clear and descriptive to convey the purpose of variables and functions.
 
 ## 2. Testing standards
-- Implement unit tests for all pure logic components to ensure correctness and reliability.
-- A smoke import test is required to verify that the pagination feature integrates correctly within the application.
-- Ensure that all tests are stable and do not produce flaky results that could lead to inconsistent outcomes.
-- Utilize pytest exclusively for testing to maintain consistency in the testing framework.
+- Unit tests must be implemented for all pure logic to ensure correctness and reliability.
+- A smoke import test is required to verify that the pagination component integrates correctly with the employee table.
+- No flaky tests are allowed; all tests must produce consistent results.
+- Only pytest should be used for testing to maintain uniformity in the testing framework.
 
 ## 3. User experience
-- Ensure the pagination UI is responsive across all devices and screen sizes for optimal user interaction.
-- Include loading and error states to inform users of the current status of data fetching and handle errors gracefully.
-- Adhere to accessibility standards at the AA level to ensure the feature is usable by all individuals, including those with disabilities.
-- Maintain consistent component patterns throughout the application to provide a cohesive user experience.
+- The pagination UI must be responsive to ensure usability across different devices and screen sizes.
+- Loading and error states must be clearly defined and displayed to enhance user feedback during interactions.
+- Accessibility standards must meet at least AA compliance to ensure inclusivity for all users.
+- Consistent component patterns should be followed to provide a cohesive user experience throughout the application.
 
 ## 4. Performance
-- Optimize for lightweight payloads to reduce load times and improve overall performance.
-- Avoid unnecessary dependencies that could bloat the application and slow down performance.
-- Ensure that the p50 API response time is under 1 second to meet user expectations for speed.
+- Payloads must be lightweight to optimize loading times and improve user experience.
+- Unnecessary dependencies should be avoided to reduce bloat and enhance performance.
+- API response times should target a p50 latency of less than 1 second to ensure quick interactions.
 
 ## 5. Spec-kit discipline
 - The pipeline executes in the following order: /speckit.specify → /speckit.plan → (Manager approval) → /speckit.tasks → /speckit.implement → tests → deploy.
-- Every downstream artifact MUST trace back to the output of the previous stage to ensure traceability and accountability throughout the development process.
+- Every downstream artifact MUST trace back to the output of the previous stage to maintain traceability and accountability.
